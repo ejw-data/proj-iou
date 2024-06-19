@@ -1,2 +1,17 @@
-# proj-iou
-I Owe You (U) app that keeps track of ongoing transactions between pairs of people.  Essentially, this helps me track who has paid for meetings at restaurants but this could be used for other transactions.
+# proj-scheduler-app
+Scoping a future cloud application that will intelligently assign users to meetings
+
+### Create Environment
+* `python -m venv <name_of_virtualenv>`
+
+### Installs
+* `pip install Flask`
+* `pip install -U Flask-SQLAlchemy`
+* `pip install sqlalchemy-utils`
+* `pip install werkzeug`
+* `pip install flask-WTF`
+* `pip install psycopg2`
+* `pip install flask_login`
+
+### Activate Environment
+* `. venv/Scripts/activate`
