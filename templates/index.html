@@ -2,7 +2,12 @@
 {% set active_page = "index" %}
 
 {% block body %}
-<main class="col-md-9 col-lg-10">
+<main class="col-md-9 col-lg-10 mx-3">
+
+    <div class="w-100 mt-3">
+            <a class="btn btn-secondary" data-bs-toggle="modal" data-bs-target="#recordModal"
+                data-bs-dismiss="modal">Add Transaction</a>
+    </div>
 
     <div
         class="pt-3 pb-2 border-bottom">
@@ -12,6 +17,67 @@
     </div>
 
     <h2>Section title</h2>
+
+    <!-- Modal -->
+
+    <div class="modal fade" id="recordModal" aria-hidden="true" aria-labelledby="recordModal" tabindex="-1">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <i class="ion-android-alert mr-1" aria-hidden="true"></i>
+                    <h5 class="modal-title" id="recordModalLabel">Add Transaction<h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+
+                    <form name="frm2" action="/post/add_record" method="POST" class="col-md-12">
+                    
+                        <!-- <h1 class="h3 mb-3 fw-normal">Add Transaction</h1> -->
+                        {{ record_form.csrf_token(id = "record_form_add_id") }}
+                    
+                        {% for message in get_flashed_messages() %}
+                        <div class="alert alert-warning alert-dismissible fade show col-md-12" role="alert">
+                            {{ message }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    
+                        {% endfor %}
+                    
+                        <div class="mb-3">
+                            {{ record_form.owee_name.label(class="col-form-label") }}
+                            {{ record_form.owee_name(class="form-control") }}
+                    
+                        </div>
+                        <div class="mb-3">
+                            {{ record_form.amount.label(class="col-form-label") }}
+                            {{ record_form.amount(class="form-control") }}
+                        </div>
+                        <div class="mb-3">
+                            {{ record_form.business_name.label(class="col-form-label") }}
+                            {{ record_form.business_name(class="form-control") }}
+                    
+                        </div>
+                        <div class="mb-3">
+                            {{ record_form.description.label(class="col-form-label") }}
+                            {{ record_form.description(class="form-control") }}
+                    
+                        </div>
+                        <div class="mb-3">
+                            {{ record_form.notes.label(class="col-form-label") }}
+                            {{ record_form.notes(class="form-control") }}
+                        </div>
+                        <div class="modal-footer">
+                            {{ record_form.submit(class="btn btn-secondary", id="record_add_submit") }}
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
 
 </main>
 {% endblock %}

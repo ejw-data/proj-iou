@@ -44,3 +44,20 @@ class Users(db.Model):
     first_name = db.Column(db.String(25))
     last_name = db.Column(db.String(25))
     email = db.Column(db.String(25))
+
+
+class Records(db.Model):
+    """
+    Individual records tracking
+    """
+
+    __bind_key__ = "iou_tracker"
+    __tablename__ = "records"
+    transaction_id = db.Column(db.Integer, primary_key=True)
+    added_by = db.Column(db.Integer)
+    payee_id = db.Column(db.Integer)
+    owee_id = db.Column(db.Integer)
+    business_name = db.Column(db.String(50))
+    description = db.Column(db.String(100))
+    notes = db.Column(db.String(500))
+    amount = db.Column(db.Numeric)

@@ -6,8 +6,14 @@ from wtforms import (
     ValidationError,
     BooleanField,
     SelectField,
+    FloatField
 )
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length
+
+from models import (
+    Users,
+    # Records
+)
 
 
 # Create Form Class
@@ -52,3 +58,35 @@ def userform_instance(form_request=None):
     return user_form
 
 
+class CreateRecordForm(FlaskForm):
+    """
+    Add transaction fields
+    """
+
+    owee_name = SelectField("I owe:", validators=[DataRequired()])
+    business_name = StringField("Business Name", validators=[DataRequired()])
+    amount = FloatField("Amount:")
+    description = StringField("Description", validators=[DataRequired()])
+    notes = StringField("Notes", validators=[DataRequired()])
+    submit = SubmitField("Submit")
+
+
+def recordform_instance(form_request=None):
+    """
+    Create to dynamically populate user inputs to selector elements
+    """
+    record_form = CreateRecordForm(form_request)
+
+    name_results = (
+        Users.query.with_entities(
+            Users.user_id, Users.first_name, Users.last_name, Users.email
+        )
+        .distinct(Users.first_name, Users.last_name)
+        .order_by(Users.last_name.asc())
+        .all()
+    )
+
+    names_list = [(i.user_id, f"{i.first_name} {i.last_name} - ({i.email})") for i in name_results]
+
+    record_form.owee_name.choices = names_list
+    return record_form

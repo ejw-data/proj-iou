@@ -22,7 +22,7 @@ VALUES ('erin', 'wills', 1, 1, 'ew@mysite.com'),
 
 
 
--- LOGIN _____________________________________________________
+-- LOGIN -----------------------------------------------------------
 
 
 -- change so that primary key is also foreign key to users (user_id), keep only username, password_hash
@@ -35,6 +35,17 @@ CREATE TABLE authentication (
 INSERT INTO authentication (login_id, username, password_hash)
 VALUES (1, 'ejwadmin', 'alf344t4090j0aojfsfa');
 
+-- Transaction Table 
+CREATE TABLE records (
+	transaction_id SERIAL PRIMARY KEY,
+	added_by INT REFERENCES users (user_id),
+	payee_id INT REFERENCES users (user_id),
+	owee_id INT REFERENCES users (user_id),
+	business_name VARCHAR,
+	description VARCHAR,
+	notes VARCHAR,
+	amount NUMERIC
+);
 
 
 

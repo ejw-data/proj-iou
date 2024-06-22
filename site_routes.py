@@ -1,9 +1,9 @@
 from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
-from models import db, Authentication, Users
+from models import db, Authentication, Users, Records
 # from flask_sqlalchemy import SQLAlchemy
-from forms import LoginForm, RegisterForm, userform_instance
+from forms import LoginForm, RegisterForm, userform_instance, recordform_instance
 
 
 # allow for multiple route types, see also api_routes.py
@@ -48,7 +48,9 @@ def index():
     """
     Summary page for all users
     """
-    return render_template("index.html")
+    record_form = recordform_instance()
+
+    return render_template("index.html", record_form=record_form)
 
 
 @site.route("/users")
@@ -91,6 +93,42 @@ def add_user():
         user_form.first_name.data = ""
         user_form.last_name.data = ""
         flash("User Added Successfully")
+
+    return redirect(request.referrer)
+
+
+@site.route("/post/add_record", methods=["POST"])
+@include_login_form
+def add_record():
+    """
+    Route used to add records to database, applied on index.html
+    """
+    record_form = recordform_instance(request.form)
+
+    # owee_id = Users.query.filter_by(user_id=record_form.owee_name.data[0]).first()
+
+    # print(owee_id.user_id)
+
+    if record_form.validate_on_submit():
+        record = Records(
+            added_by=current_user.get_id(),
+            payee_id=current_user.get_id(),
+            owee_id=record_form.owee_name.data[0],
+            business_name=record_form.business_name.data,
+            description=record_form.description.data,
+            notes=record_form.notes.data,
+            amount=record_form.amount.data
+        )
+        print('test ', record.business_name)
+        db.session.add(record)
+        db.session.commit()
+
+        record_form.owee_name.data = ""
+        record_form.business_name.data = ""
+        record_form.description = ""
+        record_form.notes.data = ""
+        record_form.amount = ""
+        flash("Record Added Successfully")
 
     return redirect(request.referrer)
 
