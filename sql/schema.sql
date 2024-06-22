@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS authentication; 
+DROP TABLE IF EXISTS transactions; 
 
 
 -- USERS ------------------------------------------------------
@@ -20,7 +21,11 @@ VALUES ('erin', 'wills', 1, 1, 'ew@mysite.com'),
 		('jake', 'powers', 9, 3, 'jp@mysite.com');
 		
 
+ALTER TABLE users
+ADD fullname VARCHAR;
 
+UPDATE users
+SET fullname = initcap(first_name) || ' ' || initcap(last_name)
 
 -- LOGIN -----------------------------------------------------------
 
@@ -48,9 +53,15 @@ CREATE TABLE records (
 );
 
 
+ALTER TABLE records
+ADD primaryInd BOOLEAN;
 
+UPDATE records
+SET primaryInd = TRUE;
 
-
+INSERT INTO records (added_by, payee_id, owee_id, business_name, description, notes, amount, primaryind)
+SELECT added_by, owee_id, payee_id, business_name, description, notes, (-1*amount), false
+FROM records;
  
 		
 		

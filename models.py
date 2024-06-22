@@ -60,4 +60,5 @@ class Records(db.Model):
     business_name = db.Column(db.String(50))
     description = db.Column(db.String(100))
     notes = db.Column(db.String(500))
+    primaryInd = db.Column(db.Boolean)
     amount = db.Column(db.Numeric)

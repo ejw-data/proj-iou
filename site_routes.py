@@ -117,10 +117,24 @@ def add_record():
             business_name=record_form.business_name.data,
             description=record_form.description.data,
             notes=record_form.notes.data,
-            amount=record_form.amount.data
+            amount=record_form.amount.data,
+            primaryInd=True
         )
         print('test ', record.business_name)
         db.session.add(record)
+
+        record2 = Records(
+            added_by=current_user.get_id(),
+            payee_id=record_form.owee_name.data[0],
+            owee_id=current_user.get_id(),
+            business_name=record_form.business_name.data,
+            description=record_form.description.data,
+            notes=record_form.notes.data,
+            amount=(record_form.amount.data * -1),
+            primaryInd=False,
+        )
+        
+        db.session.add(record2)
         db.session.commit()
 
         record_form.owee_name.data = ""
