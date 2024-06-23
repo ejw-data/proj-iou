@@ -38,4 +38,4 @@ if ~(database_exists(path["iou_tracker"])):
 
 # run app
 if __name__ == "__main__":
-    app.run(debug=True)
+    app.run(debug=False)
