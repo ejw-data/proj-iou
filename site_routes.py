@@ -75,9 +75,6 @@ def index():
         .all()
     )
 
-    print('payments ', recent_owees)
-    # print('owes ', recent_owes)
-
     return render_template("index.html",
                            user=str(login_user[0]),
                            record_form=record_form,
@@ -119,6 +116,7 @@ def add_user():
             user = Users(
                 first_name=user_form.first_name.data,
                 last_name=user_form.last_name.data,
+                fullname=f"{user_form.first_name.data.title()} {user_form.last_name.data.title()}",
                 email=user_form.email,
             )
             db.session.add(user)
