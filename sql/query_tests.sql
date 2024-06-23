@@ -1,7 +1,8 @@
 -- Queries used with db with two records per transaction
 
 Select *
-FROM records;
+FROM records
+WHERE owee_id = 2 and primary_ind=True;
 
 Select *
 FROM users;

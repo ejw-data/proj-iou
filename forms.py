@@ -6,8 +6,9 @@ from wtforms import (
     ValidationError,
     BooleanField,
     SelectField,
-    FloatField
+    FloatField,
 )
+
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length
 
 from models import (
@@ -22,8 +23,16 @@ class LoginForm(FlaskForm):
     Login Form fields
     """
 
-    username = StringField("Input your Username", validators=[DataRequired()])
-    password = PasswordField("Input your Password", validators=[DataRequired()])
+    username = StringField(
+        "Input your Username",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Input Your Username"}
+    )
+    password = PasswordField(
+        "Input your Password",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Input Your Password"}
+    )
     submit = SubmitField("Submit")
 
 

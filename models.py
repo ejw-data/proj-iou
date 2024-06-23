@@ -43,6 +43,7 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(25))
     last_name = db.Column(db.String(25))
+    fullname = db.Column(db.String(50))
     email = db.Column(db.String(25))
 
 
@@ -60,5 +61,5 @@ class Records(db.Model):
     business_name = db.Column(db.String(50))
     description = db.Column(db.String(100))
     notes = db.Column(db.String(500))
-    primaryInd = db.Column(db.Boolean)
+    primary_ind = db.Column(db.Boolean)
     amount = db.Column(db.Numeric)

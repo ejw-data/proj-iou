@@ -190,3 +190,8 @@ body {
 i {
     text-align: center;
 }
+
+input:placeholder-shown {
+    border-radius: 5px;
+    color:black;
+}
