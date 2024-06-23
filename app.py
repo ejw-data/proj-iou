@@ -33,9 +33,9 @@ def load_user(login_id):
 
 
 # generate database if it doesn't exist
-if ~(database_exists(path["iou_tracker"])):
+if ~(database_exists(path["external"])):
     db.create_all(bind_key=["iou_tracker"])
 
 # run app
 if __name__ == "__main__":
-    app.run(debug=False)
+    app.run(debug=True)
