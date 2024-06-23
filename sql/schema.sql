@@ -10,6 +10,7 @@ CREATE TABLE users (
 	user_id SERIAL PRIMARY KEY,
 	first_name VARCHAR,
 	last_name VARCHAR,
+	fullname VARCHAR,
 	email VARCHAR UNIQUE
 );
 
@@ -51,17 +52,18 @@ CREATE TABLE records (
 	business_name VARCHAR,
 	description VARCHAR,
 	notes VARCHAR,
-	amount NUMERIC
+	amount NUMERIC,
+	primary_ind BOOLEAN
 );
 
 
 ALTER TABLE records
-ADD primaryInd BOOLEAN;
+ADD primary_ind BOOLEAN;
 
 UPDATE records
-SET primaryInd = TRUE;
+SET primary_ind = TRUE;
 
-INSERT INTO records (added_by, payee_id, owee_id, business_name, description, notes, amount, primaryind)
+INSERT INTO records (added_by, payee_id, owee_id, business_name, description, notes, amount, primary_ind)
 SELECT added_by, owee_id, payee_id, business_name, description, notes, (-1*amount), false
 FROM records;
 
