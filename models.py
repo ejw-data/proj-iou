@@ -55,6 +55,8 @@ class Records(db.Model):
     __bind_key__ = "iou_tracker"
     __tablename__ = "records"
     transaction_id = db.Column(db.Integer, primary_key=True)
+    date_added = db.Column(db.DateTime)
+    date_transaction = db.Column(db.Date)
     added_by = db.Column(db.Integer)
     payee_id = db.Column(db.Integer)
     owee_id = db.Column(db.Integer)

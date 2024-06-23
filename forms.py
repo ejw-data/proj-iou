@@ -7,6 +7,8 @@ from wtforms import (
     BooleanField,
     SelectField,
     FloatField,
+    DateField,
+    DateTimeField,
 )
 
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length
@@ -15,6 +17,8 @@ from models import (
     Users,
     # Records
 )
+
+from datetime import date
 
 
 # Create Form Class
@@ -74,7 +78,8 @@ class CreateRecordForm(FlaskForm):
 
     owee_name = SelectField("I owe:", validators=[DataRequired()])
     business_name = StringField("Business Name", validators=[DataRequired()])
-    amount = FloatField("Amount:")
+    date_transaction = DateField("Transaction Date", validators=[DataRequired()], default=date.today)
+    amount = FloatField("Amount:", validators=[DataRequired()])
     description = StringField("Description", validators=[DataRequired()])
     notes = StringField("Notes", validators=[DataRequired()])
     submit = SubmitField("Submit")

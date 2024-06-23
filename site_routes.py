@@ -4,6 +4,7 @@ from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Authentication, Users, Records
 from sqlalchemy import func
 from forms import LoginForm, RegisterForm, userform_instance, recordform_instance
+from datetime import datetime
 
 
 # allow for multiple route types, see also api_routes.py
@@ -59,7 +60,7 @@ def index():
     recent_payments = (
         Records.query.filter_by(payee_id=current_user.get_id(), primary_ind=True)
         .join(Users, Users.user_id == Records.owee_id)
-        .with_entities(Users.fullname, Records.business_name, Records.amount)
+        .with_entities(Records.date_transaction, Users.fullname, Records.business_name, Records.amount)
         .order_by(Records.transaction_id.desc())
         .limit(3)
         .all()
@@ -68,7 +69,7 @@ def index():
     recent_owees = (
         Records.query.filter_by(owee_id=current_user.get_id(), primary_ind=True)
         .join(Users, Users.user_id == Records.payee_id)
-        .with_entities(Users.fullname, Records.business_name, Records.amount)
+        .with_entities(Records.date_transaction, Users.fullname, Records.business_name, Records.amount)
         .order_by(Records.transaction_id.desc())
         .limit(3)
         .all()
@@ -144,6 +145,8 @@ def add_record():
 
     if record_form.validate_on_submit():
         record = Records(
+            date_added=datetime.now(),
+            date_transaction=record_form.date_transaction.data,
             added_by=current_user.get_id(),
             payee_id=current_user.get_id(),
             owee_id=record_form.owee_name.data[0],
@@ -157,6 +160,8 @@ def add_record():
         db.session.add(record)
 
         record2 = Records(
+            date_added=datetime.now(),
+            date_transaction=record_form.date_transaction.data,
             added_by=current_user.get_id(),
             payee_id=record_form.owee_name.data[0],
             owee_id=current_user.get_id(),

@@ -39,15 +39,17 @@
     
     <table>
         <tr>
+            <th class="col-1">Date</th>
             <th class="col-3">You owe</th>
             <th class="col-3">Business Name</th>
             <th class="col-1">Balance</th>
         </tr>
         {% for record in payments %}
         <tr>
-            <td class="col-3">{{record[0]}}</td>
+            <td class="col-1">{{record[0]}}</td>
             <td class="col-3">{{record[1]}}</td>
-            <td class="col-1">{{record[2]}}</td>
+            <td class="col-3">{{record[2]}}</td>
+            <td class="col-1">{{record[3]}}</td>
         </tr>
         {% endfor %}
     </table>
@@ -57,15 +59,17 @@
     
     <table>
         <tr>
+            <th class="col-1">Date</th>
             <th class="col-3">I owe</th>
             <th class="col-3">Business Name</th>
             <th class="col-1">Balance</th>
         </tr>
         {% for record in owements %}
         <tr>
-            <td class="col-3">{{record[0]}}</td>
+            <td class="col-1">{{record[0]}}</td>
             <td class="col-3">{{record[1]}}</td>
-            <td class="col-1">{{record[2]}}</td>
+            <td class="col-3">{{record[2]}}</td>
+            <td class="col-1">{{record[3]}}</td>
         </tr>
         {% endfor %}
     </table>
@@ -94,6 +98,12 @@
                         </div>
                     
                         {% endfor %}
+
+                        <div class="mb-3">
+                            {{ record_form.date_transaction.label(class="col-form-label") }}
+                            {{ record_form.date_transaction(class="form-control") }}
+                        
+                        </div>
                     
                         <div class="mb-3">
                             {{ record_form.owee_name.label(class="col-form-label") }}
