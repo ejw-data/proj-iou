@@ -11,12 +11,68 @@
 
     <div
         class="pt-3 pb-2 border-bottom">
-        <h1 class="h2">Dashboard</h1>
+        <h1 class="h2">Hello {{user}}</h1>
 
         <!-- Add HTML -->
     </div>
 
-    <h2>Section title</h2>
+    <h2>Balance:  ${{balance}}</h2>
+    <br>
+    <br>
+
+    <h2>Total Amounts Owed</h2>
+    <table>
+        <tr>
+            <th class="col-3">You Owe</th>
+            <th class="col-1">Balance</th>
+        </tr>
+        {% for record in summary %}
+        <tr>
+            <td class="col-3">{{record[1]}}</td>
+            <td class="col-1">{{record[2]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <h2>Recent Payments</h2>
+    
+    <table>
+        <tr>
+            <th class="col-1">Date</th>
+            <th class="col-3">You owe</th>
+            <th class="col-3">Business Name</th>
+            <th class="col-1">Balance</th>
+        </tr>
+        {% for record in payments %}
+        <tr>
+            <td class="col-1">{{record[0]}}</td>
+            <td class="col-3">{{record[1]}}</td>
+            <td class="col-3">{{record[2]}}</td>
+            <td class="col-1">{{record[3]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
+    <br>
+    <br>
+    <h2>Recent IOU's</h2>
+    
+    <table>
+        <tr>
+            <th class="col-1">Date</th>
+            <th class="col-3">I owe</th>
+            <th class="col-3">Business Name</th>
+            <th class="col-1">Balance</th>
+        </tr>
+        {% for record in owements %}
+        <tr>
+            <td class="col-1">{{record[0]}}</td>
+            <td class="col-3">{{record[1]}}</td>
+            <td class="col-3">{{record[2]}}</td>
+            <td class="col-1">{{record[3]}}</td>
+        </tr>
+        {% endfor %}
+    </table>
 
     <!-- Modal -->
 
@@ -42,6 +98,12 @@
                         </div>
                     
                         {% endfor %}
+
+                        <div class="mb-3">
+                            {{ record_form.date_transaction.label(class="col-form-label") }}
+                            {{ record_form.date_transaction(class="form-control") }}
+                        
+                        </div>
                     
                         <div class="mb-3">
                             {{ record_form.owee_name.label(class="col-form-label") }}
@@ -75,6 +137,8 @@
             </div>
         </div>
     </div>
+    <br>
+    <br>
 
 
 

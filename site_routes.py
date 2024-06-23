@@ -2,8 +2,9 @@ from flask import Blueprint, render_template, request, flash, redirect, url_for
 from flask_login import login_user, login_required, logout_user, current_user
 from werkzeug.security import generate_password_hash, check_password_hash
 from models import db, Authentication, Users, Records
-# from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import func
 from forms import LoginForm, RegisterForm, userform_instance, recordform_instance
+from datetime import datetime
 
 
 # allow for multiple route types, see also api_routes.py
@@ -50,7 +51,40 @@ def index():
     """
     record_form = recordform_instance()
 
-    return render_template("index.html", record_form=record_form)
+    login_user = Users.query.with_entities(Users.fullname).filter_by(user_id=current_user.get_id()).one()
+
+    total_amount = Records.query.with_entities(func.sum(Records.amount)).filter_by(payee_id=current_user.get_id()).scalar()
+
+    summary_records = Records.query.join(Users, Users.user_id == Records.owee_id).with_entities(Records.owee_id, Users.fullname, func.sum(Records.amount)).filter_by(payee_id=current_user.get_id()).group_by(Records.owee_id, Users.fullname).all()
+
+    recent_payments = (
+        Records.query.filter_by(payee_id=current_user.get_id(), primary_ind=True)
+        .join(Users, Users.user_id == Records.owee_id)
+        .with_entities(Records.date_transaction, Users.fullname, Records.business_name, Records.amount)
+        .order_by(Records.transaction_id.desc())
+        .limit(3)
+        .all()
+    )
+
+    recent_owees = (
+        Records.query.filter_by(owee_id=current_user.get_id(), primary_ind=True)
+        .join(Users, Users.user_id == Records.payee_id)
+        .with_entities(Records.date_transaction, Users.fullname, Records.business_name, Records.amount)
+        .order_by(Records.transaction_id.desc())
+        .limit(3)
+        .all()
+    )
+
+    print('payments ', recent_owees)
+    # print('owes ', recent_owes)
+
+    return render_template("index.html",
+                           user=str(login_user[0]),
+                           record_form=record_form,
+                           balance=total_amount,
+                           summary=summary_records,
+                           payments=recent_payments,
+                           owements=recent_owees)
 
 
 @site.route("/users")
@@ -111,16 +145,34 @@ def add_record():
 
     if record_form.validate_on_submit():
         record = Records(
+            date_added=datetime.now(),
+            date_transaction=record_form.date_transaction.data,
             added_by=current_user.get_id(),
             payee_id=current_user.get_id(),
             owee_id=record_form.owee_name.data[0],
             business_name=record_form.business_name.data,
             description=record_form.description.data,
             notes=record_form.notes.data,
-            amount=record_form.amount.data
+            amount=record_form.amount.data,
+            primary_ind=True
         )
         print('test ', record.business_name)
         db.session.add(record)
+
+        record2 = Records(
+            date_added=datetime.now(),
+            date_transaction=record_form.date_transaction.data,
+            added_by=current_user.get_id(),
+            payee_id=record_form.owee_name.data[0],
+            owee_id=current_user.get_id(),
+            business_name=record_form.business_name.data,
+            description=record_form.description.data,
+            notes=record_form.notes.data,
+            amount=(record_form.amount.data * -1),
+            primary_ind=False,
+        )
+
+        db.session.add(record2)
         db.session.commit()
 
         record_form.owee_name.data = ""

@@ -6,14 +6,19 @@ from wtforms import (
     ValidationError,
     BooleanField,
     SelectField,
-    FloatField
+    FloatField,
+    DateField,
+    DateTimeField,
 )
+
 from wtforms.validators import DataRequired, InputRequired, EqualTo, Length
 
 from models import (
     Users,
     # Records
 )
+
+from datetime import date
 
 
 # Create Form Class
@@ -22,8 +27,16 @@ class LoginForm(FlaskForm):
     Login Form fields
     """
 
-    username = StringField("Input your Username", validators=[DataRequired()])
-    password = PasswordField("Input your Password", validators=[DataRequired()])
+    username = StringField(
+        "Input your Username",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Input Your Username"}
+    )
+    password = PasswordField(
+        "Input your Password",
+        validators=[DataRequired()],
+        render_kw={"placeholder": "Input Your Password"}
+    )
     submit = SubmitField("Submit")
 
 
@@ -65,7 +78,8 @@ class CreateRecordForm(FlaskForm):
 
     owee_name = SelectField("I owe:", validators=[DataRequired()])
     business_name = StringField("Business Name", validators=[DataRequired()])
-    amount = FloatField("Amount:")
+    date_transaction = DateField("Transaction Date", validators=[DataRequired()], default=date.today)
+    amount = FloatField("Amount:", validators=[DataRequired()])
     description = StringField("Description", validators=[DataRequired()])
     notes = StringField("Notes", validators=[DataRequired()])
     submit = SubmitField("Submit")

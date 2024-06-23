@@ -43,6 +43,7 @@ class Users(db.Model):
     user_id = db.Column(db.Integer, primary_key=True)
     first_name = db.Column(db.String(25))
     last_name = db.Column(db.String(25))
+    fullname = db.Column(db.String(50))
     email = db.Column(db.String(25))
 
 
@@ -54,10 +55,13 @@ class Records(db.Model):
     __bind_key__ = "iou_tracker"
     __tablename__ = "records"
     transaction_id = db.Column(db.Integer, primary_key=True)
+    date_added = db.Column(db.DateTime)
+    date_transaction = db.Column(db.Date)
     added_by = db.Column(db.Integer)
     payee_id = db.Column(db.Integer)
     owee_id = db.Column(db.Integer)
     business_name = db.Column(db.String(50))
     description = db.Column(db.String(100))
     notes = db.Column(db.String(500))
+    primary_ind = db.Column(db.Boolean)
     amount = db.Column(db.Numeric)

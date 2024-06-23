@@ -1,5 +1,6 @@
 DROP TABLE IF EXISTS users CASCADE;
 DROP TABLE IF EXISTS authentication; 
+DROP TABLE IF EXISTS transactions; 
 
 
 -- USERS ------------------------------------------------------
@@ -20,7 +21,11 @@ VALUES ('erin', 'wills', 1, 1, 'ew@mysite.com'),
 		('jake', 'powers', 9, 3, 'jp@mysite.com');
 		
 
+ALTER TABLE users
+ADD fullname VARCHAR;
 
+UPDATE users
+SET fullname = initcap(first_name) || ' ' || initcap(last_name)
 
 -- LOGIN -----------------------------------------------------------
 
@@ -38,6 +43,8 @@ VALUES (1, 'ejwadmin', 'alf344t4090j0aojfsfa');
 -- Transaction Table 
 CREATE TABLE records (
 	transaction_id SERIAL PRIMARY KEY,
+	date_added TIMESTAMP DEFAULT NOW(),
+	date_transaction DATE,
 	added_by INT REFERENCES users (user_id),
 	payee_id INT REFERENCES users (user_id),
 	owee_id INT REFERENCES users (user_id),
@@ -48,9 +55,27 @@ CREATE TABLE records (
 );
 
 
+ALTER TABLE records
+ADD primaryInd BOOLEAN;
 
+UPDATE records
+SET primaryInd = TRUE;
 
+INSERT INTO records (added_by, payee_id, owee_id, business_name, description, notes, amount, primaryind)
+SELECT added_by, owee_id, payee_id, business_name, description, notes, (-1*amount), false
+FROM records;
 
+ALTER TABLE records
+ADD date_added TIMESTAMP;
+
+UPDATE records
+SET date_added = NOW();
+
+ALTER TABLE records
+ADD date_transaction DATE;
+
+UPDATE records
+SET date_transaction = '2024-06-22';
  
 		
 		
