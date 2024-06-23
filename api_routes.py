@@ -1,7 +1,7 @@
 from flask import Blueprint, request, redirect, render_template, flash
 from models import db, Authentication, Users
 import json
-from query import login_request
+# from query import login_request
 from forms import LoginForm, CreateUserForm
 
 
