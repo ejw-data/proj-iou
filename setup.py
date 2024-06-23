@@ -1,6 +1,7 @@
 from flask import Flask
 from db_paths import path
-from config import secret_key
+# from config import secret_key
+import os
 
 
 def create_app():
@@ -8,7 +9,7 @@ def create_app():
     Initiate Flask
     """
     app = Flask(__name__)
-    app.config["SECRET_KEY"] = secret_key
+    app.config["SECRET_KEY"] = os.environ.get("KEY_SECRET")
 
     ENV = "prod"
 
